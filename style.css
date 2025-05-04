@@ -1,0 +1,124 @@
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  body {
+    animation: gradientBG 12s ease infinite;
+    background: linear-gradient(45deg, hsl(0, 10%, 92%), #efeff1);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+  }
+
+  @keyframes gradientBG {
+    0% {
+      background: linear-gradient(135deg, #8d8a8a, #2d434e);
+    }
+    50% {
+      background: linear-gradient(135deg, #333536, #ffffff);
+    }
+    100% {
+      background: linear-gradient(135deg, #222121, #ebedee);
+    }
+  }
+
+  .form-container {
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .form-card {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    padding: 35px 30px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(12px);
+    transition: all 0.4s ease;
+  }
+
+  .form-heading {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 25px;
+    background: linear-gradient(to right, #ff0080, #7928ca);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: floatText 3s ease-in-out infinite;
+  }
+
+  @keyframes floatText {
+    0% { transform: translateX(0px); }
+    50% { transform: translateX(10px); }
+    100% { transform: translateX(0px); }
+  }
+
+  label {
+    display: block;
+    margin: 12px 0 5px;
+    color: #444;
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="number"],
+  input[type="file"] {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border-radius: 12px;
+    border: 2px solid #ddd;
+    background-color: #fff;
+    font-size: 14px;
+    transition: all 0.3s ease;
+  }
+
+  input:focus {
+    border-color: #7b2ff7;
+    box-shadow: 0 0 8px rgba(123, 47, 247, 0.3);
+    outline: none;
+  }
+
+  button {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(to right, #00f260, #0575e6);
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: 0.4s ease;
+    font-size: 16px;
+    margin-top: 10px;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 242, 96, 0.4);
+  }
+
+  #preview {
+    display: block;
+    margin: 20px auto 0;
+    border-radius: 10px;
+    border: 2px dashed #ccc;
+    max-width: 100%;
+  }
+
+  @media (max-width: 600px) {
+    .form-heading {
+      font-size: 22px;
+    }
+    .form-card {
+      padding: 25px 20px;
+    }
+  }
+

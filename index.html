@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="form-container">
+    <div class="form-card">
+      <h2 class="form-heading">🚀 Apply for Laptop Scheme</h2>
+      <label for="name">Your Name</label>
+      <input type="text" id="name" placeholder="John Doe" required />
+
+      <label for="contact">Contact Number</label>
+      <input type="text" id="contact" placeholder="03XX-XXXXXXX" required />
+
+      <label for="parentName">Parent's Name</label>
+      <input type="text" id="parentName" placeholder="Mr. Smith" required />
+
+      <label for="email">Email Address</label>
+      <input type="email" id="email" placeholder="you@example.com" required />
+
+      <label for="age">Your Age</label>
+      <input type="number" id="age" placeholder="18" required />
+
+      <label for="fileInput">Upload CNIC/Document</label>
+      <input type="file" id="fileInput" />
+
+      <button id="uploadBtn">Submit</button>
+
+      <img id="preview" width="200" />
+  <p id="imageLink"></p>
+  <img id="preview" width="200" style="margin-top:10px;" />
+
+  </div>
+</div>
+
+
+  <!-- 🔽 Firebase + Cloudinary Script starts -->
+  <script type="module">
+    // ✅ Import Firebase libraries
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // ✅ Firebase project configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBoorpUMV6k7sYt7jkO3xiwGT36oBH9SQY",
+      authDomain: "form-8c62e.firebaseapp.com",
+      projectId: "form-8c62e",
+      storageBucket: "form-8c62e.appspot.com",
+      messagingSenderId: "732206735087",
+      appId: "1:732206735087:web:35dc48a31f793d331c851a"
+    };
+
+    // ✅ Initialize Firebase App and Firestore DB
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // ✅ Cloudinary setup (for image upload)
+    const cloudName = 'djdlpxqya';
+    const uploadPreset = "unsigned_preset";
+
+    // 🔽 Function to upload image and save form data
+    async function uploadImage() {
+      // ✅ Get form values
+      const name = document.getElementById('name').value.trim();
+      const contact = document.getElementById('contact').value.trim();
+      const parentName = document.getElementById('parentName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const age = document.getElementById('age').value.trim();
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+
+      // ✅ Validate inputs
+      if (!name || !contact || !parentName || !email || !age || !file) {
+        alert("⚠️ Please fill all fields and select an image.");
+        return;
+      }
+
+      try {
+        // 🔽 Upload image to Cloudinary
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', uploadPreset);
+
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+
+        // ✅ Show uploaded image preview
+        document.getElementById('preview').src = data.secure_url;
+
+        // 🔽 Save form data + image URL to Firestore
+        await addDoc(collection(db, "saylani"), {
+          name: name,
+          contact: contact,
+          parentName: parentName,
+          email: email,
+          age: Number(age),
+          imageUrl: data.secure_url,
+          uploadedAt: new Date()
+        });
+
+        // ✅ Notify user of success
+        alert("✅ Your information has been saved! We will contact you soon.");
+
+        // 🔽 Reset all input fields after submission
+        document.getElementById('name').value = "";
+        document.getElementById('contact').value = "";
+        document.getElementById('parentName').value = "";
+        document.getElementById('email').value = "";
+        document.getElementById('age').value = "";
+        document.getElementById('fileInput').value = "";
+        document.getElementById('preview').src = "";
+        document.getElementById('imageLink').textContent = "";
+
+      } catch (error) {
+        // ❌ Handle errors
+        console.error("❌ Error saving data:", error);
+        alert("❌ Failed to upload. Try again later.");
+      }
+    }
+
+    // 🔽 Event listener to trigger uploadImage() when button is clicked
+    document.getElementById('uploadBtn').addEventListener('click', uploadImage);
+  </script>
+</body>
+</html>
